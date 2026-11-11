@@ -1,0 +1,17 @@
+{
+  "name": "Rattrapage — le quiz des podcasts longs",
+  "short_name": "Rattrapage",
+  "description": "Un quiz à répartition de mise sur les épisodes longs de Génération Do It Yourself.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080B09",
+  "theme_color": "#080B09",
+  "lang": "fr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

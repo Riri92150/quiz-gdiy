@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rattrapage — le quiz des podcasts longs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080B09">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#F1F4EF; --surface:#FFFFFF; --surface-2:#E7ECE4; --line:#CDD6C9;
+  --ink:#0E1510; --ink-2:#4A574D; --dim:#78857B;
+  --acc:#0C8742; --acc-ink:#FFFFFF; --acc-soft:#D8F0E1;
+  --burn:#A8402A; --burn-soft:#F5DED7;
+  --shadow:0 1px 0 rgba(14,21,16,.08);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#080B09; --surface:#111714; --surface-2:#1A221C; --line:#2A352C;
+    --ink:#E9F1EA; --ink-2:#A3B2A6; --dim:#6E7C71;
+    --acc:#3CE37E; --acc-ink:#05140A; --acc-soft:#113021;
+    --burn:#F07A5A; --burn-soft:#2E1711;
+    --shadow:0 1px 0 rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#080B09; --surface:#111714; --surface-2:#1A221C; --line:#2A352C;
+  --ink:#E9F1EA; --ink-2:#A3B2A6; --dim:#6E7C71;
+  --acc:#3CE37E; --acc-ink:#05140A; --acc-soft:#113021;
+  --burn:#F07A5A; --burn-soft:#2E1711;
+  --shadow:0 1px 0 rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{height:100%; scroll-padding-top: env(safe-area-inset-top, 0px);}
+body{
+  margin:0; min-height:100%; background:var(--bg); color:var(--ink);
+  font-family:"Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.num{font-family:"Archivo", ui-sans-serif, system-ui, sans-serif; font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;}
+h1,h2,h3{font-family:"Archivo", ui-sans-serif, system-ui, sans-serif; margin:0; line-height:1.08; letter-spacing:-.018em;}
+p{margin:0}
+button{font:inherit; color:inherit; cursor:pointer; border:none; background:none}
+button:focus-visible, a:focus-visible, input:focus-visible{outline:2.5px solid var(--acc); outline-offset:2px; border-radius:3px}
+.opt:focus-visible{outline:2.5px solid var(--acc); outline-offset:2px}
+.wrap{max-width:720px; margin:0 auto; padding:0 20px 72px}
+
+/* ---------- top bar ---------- */
+.bar{
+  position:sticky; top:env(safe-area-inset-top, 0px); z-index:10;
+  background:var(--bg); border-bottom:1px solid var(--line);
+}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); background:var(--bg); z-index:11}
+.bar-in{max-width:720px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:14px}
+.logo{display:flex; align-items:baseline; gap:8px; font-family:"Archivo"; font-weight:800; font-size:17px; letter-spacing:-.03em}
+.logo em{font-style:normal; color:var(--acc)}
+.bar-sp{flex:1}
+.ghost{font-size:14px; color:var(--ink-2); padding:6px 10px; border-radius:7px}
+.ghost:hover{background:var(--surface-2); color:var(--ink)}
+
+/* ---------- les deux compteurs ---------- */
+.ctrs{display:flex; align-items:baseline; gap:9px}
+.ctr{display:flex; align-items:baseline; gap:5px}
+.ctr .v{font-family:"Archivo"; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.04em; transition:color .3s}
+.ctr .u{font-size:11px; font-weight:600; color:var(--dim); letter-spacing:.05em}
+.ctr.got .v{font-size:26px}
+.ctr.cap{gap:4px}
+.ctr.cap .v{font-size:16px; font-weight:700; color:var(--dim)}
+.ctr.cap .u{font-size:11px}
+.ctrs .sep{color:var(--line); font-family:"Archivo"; font-weight:700; font-size:16px}
+.ctrs.flash-up .ctr.got .v{color:var(--acc)}
+.ctrs.flash-dn .ctr.cap .v{color:var(--burn)}
+@media (max-width:420px){
+  .ctr.got .v{font-size:22px}
+  .ctr.got .u{display:none}
+  .ctr.cap .v{font-size:14px}
+}
+
+/* ---------- home ---------- */
+.hero{padding:52px 0 36px; border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(38px,9vw,62px); font-weight:800; letter-spacing:-.045em}
+.hero h1 span{color:var(--acc)}
+.hero p{margin-top:18px; color:var(--ink-2); max-width:46ch; font-size:17px}
+.sec{padding:34px 0 0}
+.sec > h2{font-size:13px; font-weight:700; color:var(--dim); letter-spacing:.04em; margin-bottom:14px}
+
+.ep{
+  display:block; width:100%; text-align:left; background:var(--surface); border:1px solid var(--line);
+  border-radius:14px; padding:20px; margin-bottom:12px; box-shadow:var(--shadow); transition:border-color .15s;
+}
+.ep:hover{border-color:var(--acc)}
+.ep h3{font-size:21px; font-weight:700}
+.ep .sub{color:var(--ink-2); font-size:15px; margin-top:5px}
+.ep .meta{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.tag{font-size:12.5px; font-weight:600; color:var(--ink-2); background:var(--surface-2); padding:4px 9px; border-radius:20px}
+.tag.best{background:var(--acc-soft); color:var(--acc)}
+.tag.bonus{background:var(--acc); color:var(--acc-ink); font-weight:700; letter-spacing:.01em}
+
+.idbox{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow)}
+.idbox label{display:block; font-size:13.5px; font-weight:600; color:var(--ink-2); margin-bottom:9px}
+.idbox input{
+  width:100%; padding:12px 14px; border-radius:9px; border:1px solid var(--line);
+  background:var(--bg); color:var(--ink); font:inherit; font-size:16px;
+}
+.idbox .hint{font-size:13px; color:var(--dim); margin-top:9px}
+
+/* ---------- game ---------- */
+.qhead{padding:22px 0 0}
+.steps{display:flex; gap:3px; margin-bottom:20px}
+.steps i{flex:1; height:4px; border-radius:2px; background:var(--surface-2)}
+.steps i.full{background:var(--acc)}
+.steps i.part{background:var(--acc); opacity:.42}
+.steps i.lost{background:var(--burn)}
+.steps i.now{background:var(--ink-2)}
+.qmeta{display:flex; gap:9px; align-items:center; margin-bottom:12px; flex-wrap:wrap}
+.qn{font-family:"Archivo"; font-weight:700; font-size:13px; color:var(--dim); font-variant-numeric:tabular-nums}
+.qtext{font-size:clamp(21px,4.6vw,27px); font-weight:700; letter-spacing:-.022em; margin:0 0 6px}
+.qwho{font-size:13.5px; color:var(--dim); margin-bottom:22px}
+
+.opt{
+  position:relative; width:100%; text-align:left; background:var(--surface);
+  border:1px solid var(--line); border-radius:12px; margin-bottom:10px; overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.opt .fill{position:absolute; inset:0 auto 0 0; width:0%; background:var(--acc-soft); transition:width .22s cubic-bezier(.3,.8,.4,1)}
+.opt .row{position:relative; display:flex; align-items:center; gap:12px; padding:14px 14px 14px 16px}
+.opt .txt{flex:1; font-size:16px; line-height:1.42}
+.opt .amt{font-family:"Archivo"; font-weight:700; font-size:17px; font-variant-numeric:tabular-nums; min-width:46px; text-align:right; color:var(--dim)}
+.opt .amt.on{color:var(--acc)}
+.opt .pm{display:flex; gap:5px}
+.pm button{
+  width:34px; height:34px; border-radius:8px; background:var(--surface-2); color:var(--ink);
+  font-family:"Archivo"; font-weight:700; font-size:17px; line-height:1; display:grid; place-items:center;
+}
+.pm button:hover:not(:disabled){background:var(--acc); color:var(--acc-ink)}
+.pm button:disabled{opacity:.3; cursor:not-allowed}
+.opt.max .row{padding-left:16px}
+
+/* reveal states */
+.opt.good{border-color:var(--acc); border-width:2px}
+.opt.good .fill{background:var(--acc-soft)}
+.opt.bad .fill{background:var(--burn-soft)}
+.opt.bad .amt{color:var(--burn); text-decoration:line-through}
+.opt.good .amt{color:var(--acc); text-decoration:none}
+.check{font-family:"Archivo"; font-weight:800; font-size:14px; color:var(--acc)}
+
+.stake{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin:18px 0 0; padding:14px 16px; background:var(--surface-2); border-radius:12px;
+}
+.stake .l{font-size:13.5px; color:var(--ink-2); font-weight:500}
+.stake .r{font-family:"Archivo"; font-weight:800; font-size:21px; font-variant-numeric:tabular-nums}
+.stake .r.zero{color:var(--acc)}
+.quick{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+.quick button{font-size:13.5px; font-weight:600; padding:8px 12px; border-radius:8px; background:var(--surface-2); color:var(--ink-2)}
+.quick button:hover{background:var(--acc); color:var(--acc-ink)}
+
+.cta{
+  display:block; width:100%; margin-top:18px; padding:16px; border-radius:12px;
+  background:var(--acc); color:var(--acc-ink); font-family:"Archivo"; font-weight:700; font-size:17px; text-align:center;
+}
+.cta:disabled{background:var(--surface-2); color:var(--dim); cursor:not-allowed}
+.cta.flat{background:var(--surface); border:1px solid var(--line); color:var(--ink)}
+
+/* reveal panel */
+.reveal{margin-top:20px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface)}
+.reveal .top{padding:15px 18px; display:flex; align-items:center; gap:11px; border-bottom:1px solid var(--line)}
+.reveal.win .top{background:var(--acc-soft)}
+.reveal.lose .top{background:var(--burn-soft)}
+.reveal .verdict{font-family:"Archivo"; font-weight:800; font-size:16px}
+.reveal.win .verdict{color:var(--acc)}
+.reveal.lose .verdict{color:var(--burn)}
+.reveal .delta{margin-left:auto; font-family:"Archivo"; font-weight:800; font-size:18px; font-variant-numeric:tabular-nums}
+.reveal.win .delta{color:var(--acc)}
+.reveal.lose .delta{color:var(--burn)}
+.reveal .body{padding:17px 18px}
+.reveal .body p{font-size:15.5px; color:var(--ink-2); line-height:1.62}
+.jump{
+  display:inline-flex; align-items:baseline; gap:9px; margin-top:15px; padding:10px 13px;
+  border-radius:9px; background:var(--surface-2); text-decoration:none; color:var(--ink); border:1px solid var(--line);
+}
+.jump .tc{font-family:"Archivo"; font-weight:800; font-size:15px; color:var(--acc); font-variant-numeric:tabular-nums}
+.jump .ch{font-size:13.5px; color:var(--ink-2)}
+a.jump:hover{border-color:var(--acc)}
+
+.allin{margin-top:16px; padding:14px 16px; border-radius:12px; background:var(--acc-soft); border:1px solid var(--acc)}
+.allin b{font-family:"Archivo"; color:var(--acc)}
+.allin p{font-size:14px; color:var(--ink-2); margin-top:4px}
+.ceil{margin-top:16px; padding:14px 16px; border-radius:12px; background:var(--surface-2); border:1px solid var(--line)}
+.ceil b{font-family:"Archivo"; color:var(--burn)}
+.ceil p{font-size:14px; color:var(--ink-2); margin-top:4px}
+
+/* ---------- end ---------- */
+.final{text-align:center; padding:48px 0 10px}
+.final .big{font-family:"Archivo"; font-weight:800; font-size:clamp(64px,17vw,112px); letter-spacing:-.055em; line-height:.92; color:var(--acc); font-variant-numeric:tabular-nums}
+.final .u{font-size:14px; font-weight:600; color:var(--dim); letter-spacing:.08em; margin-top:6px}
+.final .say{margin-top:20px; font-size:18px; color:var(--ink-2); max-width:34ch; margin-left:auto; margin-right:auto}
+.recap{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:30px}
+.recap div{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 10px; text-align:center}
+.recap b{display:block; font-family:"Archivo"; font-weight:800; font-size:23px; font-variant-numeric:tabular-nums}
+.recap span{font-size:12.5px; color:var(--dim)}
+
+/* ---------- leaderboard ---------- */
+.tabs{display:flex; gap:6px; margin-bottom:16px; background:var(--surface-2); padding:4px; border-radius:11px}
+.tabs button{flex:1; padding:9px; border-radius:8px; font-size:14px; font-weight:600; color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--surface); color:var(--ink); box-shadow:var(--shadow)}
+.lrow{display:flex; align-items:center; gap:13px; padding:13px 16px; border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:none}
+.lrow .rk{font-family:"Archivo"; font-weight:800; font-size:15px; color:var(--dim); min-width:26px; font-variant-numeric:tabular-nums}
+.lrow .nm{flex:1; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.lrow .sc{font-family:"Archivo"; font-weight:700; font-variant-numeric:tabular-nums}
+.lrow.me{background:var(--acc-soft); border-radius:10px; border-bottom-color:transparent}
+.lrow.me .nm{font-weight:700}
+.lrow .rk.p1{color:var(--acc)}
+.board{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:4px; box-shadow:var(--shadow)}
+.empty{padding:36px 20px; text-align:center; color:var(--dim); font-size:15px}
+.note{font-size:13.5px; color:var(--dim); margin-top:14px; line-height:1.55}
+.hide{display:none !important}
+@media (prefers-reduced-motion: reduce){*{transition:none !important; animation:none !important}}
+@media (max-width:420px){
+  .opt .row{flex-wrap:wrap}
+  .opt .txt{flex-basis:100%; margin-bottom:10px}
+  .recap{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="logo">Rattra<em>page</em></div>
+    <div class="bar-sp"></div>
+    <div class="ctrs hide" id="ctrBox">
+      <div class="ctr got"><span class="v num" id="ctrScore">0</span><span class="u">DIY</span></div>
+      <span class="sep">/</span>
+      <div class="ctr cap"><span class="v num" id="ctrCap">2 500</span><span class="u">max</span></div>
+    </div>
+    <button class="ghost" id="navBoard">Classement</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ ACCUEIL ============ -->
+  <section id="vHome">
+    <div class="hero">
+      <h1>Tu as écouté.<br>Tu as <span>tout retenu</span>&nbsp;?</h1>
+      <p>Les épisodes durent trois heures et s'écoutent en faisant autre chose. Mise tes jetons sur ce que tu crois avoir entendu — et récupère le passage exact quand tu te plantes.</p>
+    </div>
+
+    <div class="sec">
+      <h2>Choisis un épisode</h2>
+      <div id="epList"></div>
+    </div>
+
+    <div class="sec">
+      <h2>Ton nom au classement</h2>
+      <div class="idbox">
+        <label for="pseudo">Prénom ou pseudo</label>
+        <input id="pseudo" type="text" maxlength="24" placeholder="Riri" autocomplete="nickname">
+        <p class="hint" id="pseudoHint">Il apparaîtra dans le classement partagé.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JEU ============ -->
+  <section id="vGame" class="hide">
+    <div class="qhead">
+      <div class="steps" id="steps"></div>
+      <div class="qmeta">
+        <span class="qn" id="qn">01 / 12</span>
+        <span class="tag" id="qcat">fait</span>
+        <span class="tag bonus hide" id="qbonus">Question bonus — encaissement doublé, jusqu'à 250</span>
+      </div>
+      <h2 class="qtext" id="qtext"></h2>
+      <p class="qwho" id="qwho"></p>
+    </div>
+
+    <div id="opts"></div>
+
+    <div id="betZone">
+      <div class="stake">
+        <span class="l">Jetons à placer sur cette question</span>
+        <span class="r num" id="left">100</span>
+      </div>
+      <div class="quick">
+        <button data-q="clear">Tout reprendre</button>
+        <button data-q="split2">Partager en deux</button>
+        <button data-q="split4">Partager en quatre</button>
+      </div>
+      <button class="cta" id="validate" disabled>Place tous tes jetons</button>
+    </div>
+
+    <div id="revealZone" class="hide"></div>
+  </section>
+
+  <!-- ============ FIN ============ -->
+  <section id="vEnd" class="hide">
+    <div class="final">
+      <div class="big num" id="fScore">0</div>
+      <div class="u">DIY</div>
+      <p class="say" id="fSay"></p>
+      <div class="recap">
+        <div><b class="num" id="fGood">0</b><span>bonnes réponses</span></div>
+        <div><b class="num" id="fAllIn">0</b><span>tout-en réussis</span></div>
+        <div><b class="num" id="fBest">0</b><span>ton record</span></div>
+      </div>
+      <button class="cta" id="saveScore" style="margin-top:26px">Enregistrer au classement</button>
+      <button class="cta flat" id="replay">Rejouer cet épisode</button>
+      <button class="cta flat" id="backHome">Choisir un autre épisode</button>
+    </div>
+  </section>
+
+  <!-- ============ CLASSEMENT ============ -->
+  <section id="vBoard" class="hide">
+    <div class="sec" style="padding-top:28px">
+      <h2 style="font-size:28px;color:var(--ink);letter-spacing:-.03em;margin-bottom:20px">Classement</h2>
+      <div class="tabs">
+        <button id="tabEp" aria-selected="true">Cet épisode</button>
+        <button id="tabAll" aria-selected="false">Général</button>
+      </div>
+      <div class="board" id="boardList"><div class="empty">Chargement…</div></div>
+      <p class="note" id="boardNote"></p>
+      <button class="cta flat" id="boardBack" style="margin-top:18px">Retour</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Episode livre par l'Editeur : colle ici le JSON tel quel, sans retouche. -->
+
+<script>
+/* =====================================================================
+   DONNÉES
+   ===================================================================== */
+const UNIT  = "DIY";
+const MISE  = 100;   // jetons à répartir, identiques à chaque question
+const ALLIN = 125;   // encaissé quand les 100 sont sur la bonne réponse
+const PAS   = 10;    // pas des boutons − et +
+const MULT  = 2;     // question bonus : encaissement doublé, mise inchangée
+
+// Encaissement maximal d'une question : 125, ou 250 si elle porte "bonus".
+// Le tout-en se cumule avec le bonus, d'où 125 × 2.
+const gainMax = q => (q && q.bonus ? ALLIN * MULT : ALLIN);
+// Plafond de départ : somme sur toutes les questions. Sur 10 normales et
+// 2 bonus, cela fait 1750. Le chiffre n'est écrit nulle part, il se déduit
+// du JSON — un épisode à la composition différente reste juste.
+const plafondMax = () => ep.questions.reduce((a,q) => a + gainMax(q), 0);
+
+// Les épisodes vivent dans data/. index.json en donne la liste : y ajouter un
+// fichier suffit à faire apparaître l'épisode, sans toucher à cette page.
+let EPISODES = [];
+async function chargerEpisodes(){
+  const liste = await (await fetch("data/index.json", {cache:"no-cache"})).json();
+  const lus = await Promise.all(liste.map(async f => {
+    try { return await (await fetch("data/" + f, {cache:"no-cache"})).json(); }
+    catch(e){ console.warn("épisode illisible :", f, e); return null; }
+  }));
+  EPISODES = lus.filter(Boolean);
+}
+
+/* =====================================================================
+   ÉTAT
+   ===================================================================== */
+let ep = null;
+let qi = 0, score = 0, bets = [0,0,0,0], revealed = false;
+let good = 0, allIns = 0, history = [];
+let db = null, user = null, myId = null, pseudo = "";
+let boardScope = "ep";
+
+const $ = s => document.querySelector(s);
+const views = { home:$("#vHome"), game:$("#vGame"), end:$("#vEnd"), board:$("#vBoard") };
+
+function show(name){
+  for(const k in views) views[k].classList.toggle("hide", k !== name);
+  $("#ctrBox").classList.toggle("hide", name !== "game");
+  window.scrollTo(0,0);
+}
+const fmt = n => n.toLocaleString("fr-FR");
+function tcLabel(s){
+  const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60;
+  return h ? `${h}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}`
+           : `${m}:${String(x).padStart(2,"0")}`;
+}
+function chapitreFor(tc){
+  let out = "";
+  for(const [t,nom] of (ep.chapitres || [])) if(tc >= t) out = nom;
+  return out;
+}
+
+/* ---- stockage local (facultatif, best effort) ---- */
+function lsGet(k,d){ try{ const v = localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+// Les records de la mécanique précédente plafonnaient à 1000 : ils ne se
+// comparent pas aux nouveaux. On change de clé plutôt que de les afficher.
+const BEST_KEY  = "best.bonus";        // les records d'avant les bonus ne sont pas comparables
+const SCORES_DB = "scores-bonus";      // idem pour le classement partagé
+try{ localStorage.removeItem("best"); localStorage.removeItem("best.mise-fixe"); }catch(e){}
+
+/* =====================================================================
+   ACCUEIL
+   ===================================================================== */
+function renderHome(){
+  const best = lsGet(BEST_KEY, {});
+  $("#epList").innerHTML = EPISODES.map(e => {
+    const b = best[e.id];
+    return `<button class="ep" data-ep="${e.id}">
+      <h3>${e.titre}</h3>
+      <div class="sub">${e.sousTitre}</div>
+      <div class="meta">
+        <span class="tag">${e.questions.length} questions</span>
+        <span class="tag">${Math.round(e.duree/60)} min d'épisode</span>
+        ${b ? `<span class="tag best">ton record : ${fmt(b)} ${UNIT}</span>` : ``}
+      </div>
+    </button>`;
+  }).join("");
+  document.querySelectorAll("[data-ep]").forEach(b =>
+    b.addEventListener("click", () => { ep = EPISODES.find(e=>e.id===b.dataset.ep); startGame(); })
+  );
+  $("#pseudo").value = pseudo || lsGet("pseudo","");
+}
+
+$("#pseudo").addEventListener("input", e => {
+  pseudo = e.target.value.trim();
+  lsSet("pseudo", pseudo);
+});
+
+/* =====================================================================
+   JEU
+   ===================================================================== */
+function startGame(){
+  qi = 0; score = 0; good = 0; allIns = 0; history = [];
+  show("game"); renderQuestion();
+}
+
+function renderQuestion(){
+  const q = ep.questions[qi];
+  bets = [0,0,0,0]; revealed = false;
+
+  $("#steps").innerHTML = ep.questions.map((_,i) => {
+    const h = history[i];
+    const cls = h ? (h.gain === 0 ? "lost" : (h.allIn ? "full" : "part"))
+                  : (i===qi ? "now" : "");
+    return `<i class="${cls}"></i>`;
+  }).join("");
+
+  $("#qn").textContent = `${String(qi+1).padStart(2,"0")} / ${String(ep.questions.length).padStart(2,"0")}`;
+  $("#qcat").textContent = q.cat;
+  $("#qbonus").classList.toggle("hide", !q.bonus);
+  $("#qtext").textContent = q.q;
+  $("#qwho").textContent = q.qui === "hôte" ? "Propos de l'animateur" : "Propos de l'invité";
+
+  $("#opts").innerHTML = q.o.map((t,i) => `
+    <div class="opt" data-i="${i}" tabindex="0">
+      <div class="fill"></div>
+      <div class="row">
+        <span class="txt">${escapeHtml(t)}</span>
+        <span class="amt num" data-amt="${i}">0</span>
+        <span class="pm">
+          <button data-act="minus" data-i="${i}" aria-label="Retirer des jetons">−</button>
+          <button data-act="plus"  data-i="${i}" aria-label="Ajouter des jetons">+</button>
+        </span>
+      </div>
+    </div>`).join("");
+
+  $("#betZone").classList.remove("hide");
+  $("#revealZone").classList.add("hide");
+  $("#revealZone").innerHTML = "";
+  updateBets();
+  bump(null);
+}
+
+function placed(){ return bets.reduce((a,b)=>a+b,0); }
+function remaining(){ return MISE - placed(); }
+// Plafond encore atteignable : score acquis + ce que les questions non
+// encore jouées peuvent rapporter au mieux, bonus compris. Ne remonte jamais.
+function plafond(){
+  return ep.questions.reduce((a,q,i) => history[i] ? a : a + gainMax(q), score);
+}
+
+function updateBets(){
+  bets.forEach((v,i) => {
+    const el = document.querySelector(`.opt[data-i="${i}"]`);
+    if(!el) return;
+    el.querySelector(".fill").style.width = (v/MISE*100)+"%";
+    const a = el.querySelector(`[data-amt="${i}"]`);
+    a.textContent = fmt(v);
+    a.classList.toggle("on", v>0);
+  });
+  const left = remaining();
+  const L = $("#left");
+  L.textContent = fmt(left);
+  L.classList.toggle("zero", left===0);
+
+  document.querySelectorAll('[data-act="plus"]').forEach(b => b.disabled = left<=0);
+  document.querySelectorAll('[data-act="minus"]').forEach(b => b.disabled = bets[+b.dataset.i]<=0);
+
+  // Validation bloquée tant que la totalité des 100 n'est pas placée.
+  const v = $("#validate");
+  v.disabled = left !== 0;
+  if(left !== 0){
+    v.textContent = `Place encore ${fmt(left)} ${UNIT}`;
+  } else {
+    const solo = bets.filter(b => b > 0).length === 1;
+    v.textContent = solo ? `Valider — tout-en, ${fmt(gainMax(ep.questions[qi]))} ${UNIT} en jeu`
+                         : "Valider la répartition";
+  }
+}
+
+$("#opts").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]");
+  if(b){
+    const i = +b.dataset.i;
+    if(b.dataset.act === "plus")  bets[i] += Math.min(PAS, remaining());
+    else                          bets[i] -= Math.min(PAS, bets[i]);
+    updateBets(); return;
+  }
+  const card = e.target.closest(".opt");
+  if(card && !revealed) allIn(+card.dataset.i);
+});
+
+function allIn(i){                     // taper une réponse : tout dessus
+  bets = [0,0,0,0]; bets[i] = MISE;
+  updateBets();
+}
+
+$("#opts").addEventListener("keydown", e => {
+  const card = e.target.closest(".opt");
+  if(!card || revealed) return;
+  if(e.key === "Enter" || e.key === " "){
+    e.preventDefault();
+    allIn(+card.dataset.i);
+  }
+});
+
+$(".quick").addEventListener("click", e => {
+  const b = e.target.closest("button[data-q]"); if(!b) return;
+  if(b.dataset.q === "clear")  bets = [0,0,0,0];
+  if(b.dataset.q === "split2"){ const h = MISE/2; bets = [h, h, 0, 0]; }
+  if(b.dataset.q === "split4"){ const q4 = MISE/4; bets = [q4,q4,q4,q4]; }
+  updateBets();
+});
+
+function bump(gain, max){
+  const box = $("#ctrBox");
+  $("#ctrScore").textContent = fmt(score);
+  $("#ctrCap").textContent   = fmt(plafond());
+  box.classList.remove("flash-up","flash-dn");
+  if(gain === null) return;            // simple rafraîchissement
+  if(gain > 0) box.classList.add("flash-up");
+  if(gain < (max ?? ALLIN)) box.classList.add("flash-dn");
+  setTimeout(()=>box.classList.remove("flash-up","flash-dn"), 700);
+}
+
+$("#validate").addEventListener("click", () => {
+  if(revealed) return;
+  revealed = true;
+  const q = ep.questions[qi];
+  const mult  = q.bonus ? MULT : 1;               // question bonus : ×2
+  const mise  = bets[q.c];
+  const allIn = mise === MISE;                    // tout sur la bonne réponse
+  const gain  = (allIn ? ALLIN : mise) * mult;    // tout-en et bonus se cumulent
+  const win   = gain > 0;
+  if(win) good++;
+  if(allIn) allIns++;
+
+  document.querySelectorAll(".opt").forEach(el => {
+    const i = +el.dataset.i;
+    el.classList.add(i === q.c ? "good" : "bad");
+    if(i !== q.c){ el.querySelector(".fill").style.width = "0%"; }
+    el.querySelectorAll("button").forEach(b => b.disabled = true);
+    if(i === q.c) el.querySelector(".row").insertAdjacentHTML("beforeend", '<span class="check">✓</span>');
+  });
+
+  score += gain;
+  history[qi] = { gain, allIn };
+  const perte = gainMax(q) - gain;                // ce que le plafond perd ici
+  bump(gain, gainMax(q));
+  $("#betZone").classList.add("hide");
+
+  const last = qi === ep.questions.length - 1;
+  let noteHtml = "";
+  if(allIn){
+    noteHtml = `<div class="allin">
+      <b>Tout-en réussi : ${fmt(ALLIN * mult)} ${UNIT}</b>
+      <p>Les 100 jetons étaient sur la bonne réponse${mult > 1 ? ", et la question était bonus" : ""}. Tu encaisses ${fmt((ALLIN - MISE) * mult)} de plus que le maximum d'une répartition prudente.</p></div>`;
+  } else if(perte > 0){
+    noteHtml = `<div class="ceil">
+      <b>Plafond : −${fmt(perte)} ${UNIT}</b>
+      <p>Ton maximum atteignable sur cet épisode tombe à ${fmt(plafond())} ${UNIT}. Il ne remontera pas.</p></div>`;
+  }
+
+  const tc = tcLabel(q.tc), ch = chapitreFor(q.tc);
+  const chH = ch ? `<span class="ch">${ch}</span>` : "";
+  const jump = ep.videoUrl
+    ? `<a class="jump" href="${ep.videoUrl}${ep.videoUrl.includes("?")?"&":"?"}t=${q.tc}" target="_blank" rel="noopener">
+         <span class="tc">${tc}</span>${chH}</a>`
+    : `<span class="jump"><span class="tc">${tc}</span>${chH}</span>`;
+
+  $("#revealZone").innerHTML = `
+    <div class="reveal ${win?"win":"lose"}">
+      <div class="top">
+        <span class="verdict">${win ? "Tu encaisses" : "Rien d'encaissé"}</span>
+        <span class="delta num">${win ? "+"+fmt(gain) : "0"}</span>
+      </div>
+      <div class="body">
+        <p>${q.e}</p>
+        ${jump}
+      </div>
+    </div>
+    ${noteHtml}
+    <button class="cta" id="next">${last ? "Voir ton score" : "Question suivante"}</button>`;
+  $("#revealZone").classList.remove("hide");
+  $("#next").addEventListener("click", () => {
+    if(last) endGame(); else { qi++; renderQuestion(); }
+  });
+  $("#revealZone").scrollIntoView({behavior:"smooth", block:"nearest"});
+});
+
+/* =====================================================================
+   FIN DE PARTIE
+   ===================================================================== */
+function endGame(){
+  const best = lsGet(BEST_KEY, {});
+  const prev = best[ep.id] || 0;
+  if(score > prev){ best[ep.id] = score; lsSet(BEST_KEY, best); }
+
+  const max = plafondMax();
+  $("#fScore").textContent = fmt(score);
+  $("#fGood").textContent  = `${good}/${ep.questions.length}`;
+  $("#fAllIn").textContent = allIns;
+  $("#fBest").textContent  = fmt(Math.max(score, prev));
+
+  const part = score / max;
+  let say;
+  if(part >= .8)      say = "Tu as écouté pour de vrai. Et tu as osé le tout-en.";
+  else if(part >= .5) say = "Solide. Les passages que tu as ratés t'attendent aux timecodes.";
+  else if(part >= .2) say = "L'écoute était distraite. Les explications valent le détour.";
+  else                say = "Il reste tout l'épisode à redécouvrir. C'était un peu le but.";
+  $("#fSay").textContent = `${say} Plafond de la partie : ${fmt(max)} ${UNIT}.`;
+
+  $("#saveScore").classList.toggle("hide", !db);
+  $("#saveScore").disabled = false;
+  $("#saveScore").textContent = "Enregistrer au classement";
+  show("end");
+}
+
+$("#replay").addEventListener("click", startGame);
+$("#backHome").addEventListener("click", () => { renderHome(); location.hash = "accueil"; show("home"); });
+
+$("#saveScore").addEventListener("click", async () => {
+  if(!db || !myId) return;
+  const nom = (pseudo || lsGet("pseudo","")).trim();
+  if(!nom){
+    renderHome(); show("home");
+    $("#pseudo").focus();
+    $("#pseudoHint").textContent = "Indique un nom pour apparaître au classement, puis rejoue ou reviens ici.";
+    return;
+  }
+  const btn = $("#saveScore");
+  btn.disabled = true; btn.textContent = "Enregistrement…";
+  try{
+    const ref = db.doc(SCORES_DB + "/" + myId);
+    const snap = await ref.get();
+    const cur = (snap && snap.exists && snap.data()) ? snap.data() : { parties:{} };
+    const parties = cur.parties || {};
+    if((parties[ep.id] || 0) < score){ parties[ep.id] = score; }
+    const total = Object.values(parties).reduce((a,b)=>a+b,0);
+    await ref.set({ pseudo:nom, parties, total, maj:Date.now() });
+    btn.textContent = "Enregistré ✓";
+    setTimeout(()=>openBoard("ep"), 600);
+  }catch(err){
+    btn.disabled = false;
+    btn.textContent = "Impossible d'enregistrer — réessayer";
+  }
+});
+
+/* =====================================================================
+   CLASSEMENT
+   ===================================================================== */
+function openBoard(scope){
+  boardScope = scope || boardScope;
+  $("#tabEp").setAttribute("aria-selected", boardScope==="ep");
+  $("#tabAll").setAttribute("aria-selected", boardScope==="all");
+  show("board");
+  loadBoard();
+}
+$("#navBoard").addEventListener("click", () => { location.hash = "classement"; openBoard(); });
+$("#boardBack").addEventListener("click", () => { location.hash = "accueil"; renderHome(); show("home"); });
+$("#tabEp").addEventListener("click", () => openBoard("ep"));
+$("#tabAll").addEventListener("click", () => openBoard("all"));
+
+let boardTimer = null;
+async function loadBoard(){
+  const list = $("#boardList"), note = $("#boardNote");
+  if(!db){
+    list.innerHTML = `<div class="empty">Le classement partagé n'est pas disponible ici.<br>Ton record reste enregistré sur cet appareil.</div>`;
+    note.textContent = "";
+    return;
+  }
+  list.innerHTML = `<div class="empty">Chargement…</div>`;
+  clearTimeout(boardTimer);
+  boardTimer = setTimeout(() => {
+    if(list.querySelector(".empty")) list.innerHTML = `<div class="empty">Le classement ne répond pas pour le moment.</div>`;
+  }, 10000);
+
+  try{
+    const snap = await db.collection(SCORES_DB).orderBy("total","desc").limit(200).get();
+    clearTimeout(boardTimer);
+    let rows = [];
+    snap.forEach(d => {
+      const v = d.data() || {};
+      const val = boardScope === "all" ? (v.total || 0) : ((v.parties||{})[ep.id] ?? null);
+      if(val === null || val === undefined) return;
+      rows.push({ id:d.id, nom:v.pseudo || "Anonyme", score:val });
+    });
+    rows.sort((a,b) => b.score - a.score);
+
+    if(!rows.length){
+      list.innerHTML = `<div class="empty">Personne n'a encore joué cet épisode.<br>Sois le premier.</div>`;
+    } else {
+      list.innerHTML = rows.slice(0,50).map((r,i) => `
+        <div class="lrow ${r.id===myId?"me":""}">
+          <span class="rk ${i===0?"p1":""}">${i+1}</span>
+          <span class="nm">${escapeHtml(r.nom)}</span>
+          <span class="sc num">${fmt(r.score)}</span>
+        </div>`).join("");
+    }
+    note.textContent = boardScope === "all"
+      ? "Cumul de ton meilleur score sur chaque épisode. Il grandira à mesure que de nouveaux épisodes arrivent."
+      : "Meilleur score de chacun sur cet épisode.";
+  }catch(err){
+    clearTimeout(boardTimer);
+    list.innerHTML = `<div class="empty">Le classement n'a pas pu être chargé.</div>`;
+  }
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* =====================================================================
+   ROUTAGE + CAPACITÉS
+   ===================================================================== */
+function route(){
+  const h = (location.hash || "").replace("#","");
+  if(h === "classement") openBoard();
+  else { renderHome(); show("home"); }
+}
+window.addEventListener("hashchange", route);
+
+(async () => {
+  try {
+    await chargerEpisodes();
+  } catch(e) {
+    $("#epList").innerHTML = `<div class="empty">Les épisodes n'ont pas pu être chargés.<br>Vérifie data/index.json.</div>`;
+    return;
+  }
+  renderHome();
+  route();
+})();
+
+/* Classement partagé — étape 4.
+   Brancher ici un appel REST : renseigner db avec un objet exposant
+   doc(chemin).set(valeur) et la lecture de la collection, puis
+   $("#saveScore").classList.remove("hide"). Tant que db vaut null, le
+   record reste local à l'appareil et la page le dit au joueur. */
+$("#pseudoHint").textContent = "Il apparaîtra dans le classement partagé, une fois celui-ci branché.";
+</script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>

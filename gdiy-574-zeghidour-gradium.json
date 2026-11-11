@@ -1,0 +1,180 @@
+{
+  "id": "gdiy-574-zeghidour-gradium",
+  "titre": "Neil Zeghidour — Gradium",
+  "sousTitre": "Modèles de voix, harnais d'agents et commoditisation : quitter Google pour un labo, puis une entreprise",
+  "duree": 8880,
+  "videoUrl": "",
+  "chapitres": [],
+  "questions": [
+    {
+      "cat": "chiffre",
+      "qui": "invité",
+      "tc": 1980,
+      "q": "De quel montant était la seed de Gradium ?",
+      "o": [
+        "250 millions de dollars",
+        "300 millions d'euros",
+        "100 millions de dollars",
+        "11 milliards de dollars"
+      ],
+      "c": 2,
+      "e": "Gradium a levé 100 millions de dollars en seed et avait environ un an au moment de l'enregistrement. Les autres montants cités dans l'épisode sont ceux de Sesame, qui a levé 250 millions de dollars grâce à ce que l'invité appelle un « Moshi++ », la dotation de 300 millions d'euros de Kyutai, et la valorisation d'ElevenLabs passée de 11 à 22 milliards en quelques mois."
+    },
+    {
+      "cat": "chiffre",
+      "qui": "invité",
+      "tc": 1173,
+      "q": "Combien de paramètres comptent les modèles de voix de Gradium, selon l'invité ?",
+      "o": [
+        "Entre 2 et 5 milliards",
+        "7 milliards, comme le premier Moshi",
+        "Entre 30 et 50 milliards",
+        "Environ 1 000 milliards"
+      ],
+      "c": 0,
+      "e": "Les modèles de voix de Gradium pèsent 2 à 5 milliards de paramètres, contre environ 1 000 milliards pour un grand modèle de raisonnement. Le premier Moshi, en 2024, en faisait 7 milliards : le grossir à 30 ou 50 milliards l'aurait rendu plus intelligent, mais plus coûteux à entraîner et à servir, avec plus de latence. C'est ce dilemme entre naturel et intelligence qui a conduit à la délégation hybride."
+    },
+    {
+      "cat": "fait",
+      "qui": "invité",
+      "tc": 7995,
+      "q": "À quoi le client Renault, avec RMC BFM, utilise-t-il les modèles de Gradium ?",
+      "o": [
+        "À traduire en direct les émissions de la radio pour des auditeurs internationaux répartis sur plusieurs continents",
+        "À interviewer le conducteur à la voix pendant le trajet pour enrichir ses recommandations d'écoute",
+        "À lire les plaques d'immatriculation dictées par les clients pour accélérer les déclarations d'assurance auto",
+        "À générer les transitions entre les podcasts d'une playlist personnalisée, dans la voix de journalistes connus"
+      ],
+      "c": 3,
+      "e": "Les transitions entre deux podcasts d'une playlist personnalisée sont générées dans la voix de journalistes connus. Les trois autres usages existent aussi dans l'épisode, mais chez d'autres clients : la traduction en temps réel pour des lives à destination de publics internationaux, une application de rencontre qui interviewe l'utilisateur pendant une heure et demie, et les plaques d'immatriculation côté assurance auto. L'invité précise que Gradium ne fait ni livre audio, ni narration : sa spécialité est l'interaction."
+    },
+    {
+      "cat": "anecdote",
+      "qui": "invité",
+      "tc": 5410,
+      "q": "Pourquoi les voix d'acteurs professionnels enregistrées au début par Gradium ont-elles été rejetées par les utilisateurs ?",
+      "o": [
+        "Parce que le clonage dégradait trop le timbre des acteurs au moment de la synthèse",
+        "Parce que l'habitude publicitaire de sur-articuler rendait le résultat robotique au téléphone",
+        "Parce que les acteurs refusaient de licencier leur voix pour un usage en production",
+        "Parce que les accents régionaux des acteurs ne correspondaient pas aux attentes des clients"
+      ],
+      "c": 1,
+      "e": "La voix était parfaitement répliquée : le problème venait de la sur-articulation, réflexe de métier en publicité, qui sonne faux quand on appelle son dentiste. Les gens voulaient les imperfections et les hésitations. L'équipe a réservé un studio dans le Sentier, posé une vitre, et enregistré ses propres membres en train de se raconter leurs vacances ; en production, beaucoup de clients utilisent aujourd'hui la voix de l'invité ou celles de ses collègues."
+    },
+    {
+      "cat": "anecdote",
+      "qui": "invité",
+      "tc": 2004,
+      "q": "Quel marché le pitch deck de la seed de Gradium n'avait-il pas anticipé ?",
+      "o": [
+        "L'interaction vocale avec les logiciels, le code et les outils bureautiques",
+        "Le support client téléphonique automatisé pour les grands comptes",
+        "La traduction en temps réel des conférences et des événements diffusés en live",
+        "Les personnages non joueurs vocaux dans les très gros jeux en ligne"
+      ],
+      "c": 0,
+      "e": "Le deck tablait sur le jeu vidéo et le support client, qu'il avait donc bien vus venir. Ce qu'il n'avait pas anticipé, c'est que l'interaction avec les logiciels deviendrait vocale : le vibe coding, puis le code tout court, sont devenus une conversation avec des agents, et la veille de l'enregistrement Claude arrivait dans Google Slides, Docs et Sheets. Son analyse : dès que ce sont les machines qui maîtrisent notre langage, on s'exprime bien plus naturellement à la voix."
+    },
+    {
+      "cat": "concept",
+      "qui": "invité",
+      "tc": 1513,
+      "q": "Qu'est-ce qui distingue un modèle vocal full duplex d'un modèle half duplex ?",
+      "o": [
+        "Il écoute en continu tout en parlant et distingue un acquiescement d'une véritable interruption",
+        "Il traite la voix de bout en bout, sans jamais passer par une étape de transcription en texte",
+        "Il peut tenir une conversation avec plusieurs interlocuteurs humains en même temps",
+        "Il tourne localement sur le téléphone, sans appel à une API distante ni coût associé"
+      ],
+      "c": 0,
+      "e": "Un modèle half duplex écoute ou parle, jamais les deux : il oblige l'humain à se discipliner, ni trop vite ni trop lentement, et surtout à ne pas tousser pendant la réponse sous peine d'être pris pour une interruption. L'invité compare cela au talkie-walkie. Moshi a introduit le full duplex ; GPT Live est le premier à l'avoir repris en production."
+    },
+    {
+      "cat": "concept",
+      "qui": "invité",
+      "tc": 1652,
+      "q": "En quoi consiste la délégation hybride, publiée sous le nom MoshiRAG ?",
+      "o": [
+        "Deux modèles de taille égale se répartissent la parole et l'écoute pour supprimer toute latence perceptible",
+        "Un petit modèle tient la conversation et interroge en arrière-plan un modèle de pointe dans le cloud",
+        "Un modèle local prend le relais du modèle distant dès que la connexion réseau devient insuffisante",
+        "Un modèle de texte rédige la réponse qu'un modèle de voix se contente ensuite de prononcer à l'oral"
+      ],
+      "c": 1,
+      "e": "Le premier Moshi avait résolu la latence et le naturel, pas l'intelligence, et le grossir aurait coûté cher en latence comme en service. La solution : un petit modèle dont le seul rôle est d'être l'interlocuteur, capable de faire « un appel à un ami » et de réinsérer naturellement la réponse dans la conversation. Reste à meubler les quelques secondes d'attente — certains clients y mettent une musique vintage ou de faux clics de clavier, qui marchent « pas si mal »."
+    },
+    {
+      "cat": "concept",
+      "qui": "invité",
+      "tc": 3909,
+      "q": "Qu'appelle-t-on le « harnais » autour d'un modèle ?",
+      "o": [
+        "La couche de sécurité qui empêche un agent d'être détourné par une injection de prompt malveillante",
+        "L'infrastructure de calcul sur laquelle le modèle est entraîné, puis servi à grande échelle aux utilisateurs",
+        "Le jeu d'instructions système qui fixe la personnalité, le ton et le style des réponses du modèle",
+        "L'ensemble qui articule plusieurs instances du modèle, répartit les sous-tâches et donne accès aux outils"
+      ],
+      "c": 3,
+      "e": "Un modèle seul est une force brute peu contextualisée, au contexte limité, qui fait une tâche à la fois. Le harnais désigne un manager qui analyse la demande, décide combien de pistes explorer en parallèle, répartit les sous-tâches et ouvre l'accès à Slack, aux emails ou à une carte bancaire. L'invité le compare au film Memento : un homme qui ne se souvient que des cinq dernières minutes, mais dont le travail s'accumule si la division des tâches est bonne. À modèle identique, l'écart de productivité entre un bon et un mauvais harnais est de l'ordre de dix."
+    },
+    {
+      "cat": "idée",
+      "qui": "invité",
+      "tc": 279,
+      "q": "Quelle règle l'invité pose-t-il pour un agent qui a accès aux emails et au calendrier de son utilisateur ?",
+      "o": [
+        "Il doit tourner localement, sans jamais transmettre la moindre donnée à un modèle hébergé dans le cloud",
+        "Il peut tout lire et rédiger des brouillons, mais tout envoi vers l'extérieur exige un clic humain",
+        "Il ne doit être relié qu'aux services strictement nécessaires, trois ou quatre au grand maximum",
+        "Il doit être supervisé par un second agent chargé de relire ses messages avant chaque envoi"
+      ],
+      "c": 1,
+      "e": "Dès qu'un agent peut communiquer avec l'extérieur, il peut être détourné par injection de prompt : il suffit qu'un invité modifie la description d'un événement de calendrier pour que l'agent, en la lisant plus tard, voie ses instructions réécrites et sorte des informations confidentielles. L'invité rappelle qu'un spécialiste comme Pliny the Liberator casse les LLM en quelques jours. C'est cette conversation, lors d'un premier dîner place des Vosges, qui a conduit l'animateur à envisager de brider Vadim — l'agent qui avait justement envoyé l'invitation au podcast."
+    },
+    {
+      "cat": "idée",
+      "qui": "invité",
+      "tc": 2738,
+      "q": "Pour l'invité, qu'est-ce qui valide vraiment un modèle de conversation ?",
+      "o": [
+        "Qu'il soit repris en open source par d'autres laboratoires pour servir de base à leurs propres modèles",
+        "Qu'il obtienne les meilleurs scores en blind test face à l'ensemble des modèles concurrents",
+        "Qu'il tienne la conversation en temps réel sans jamais dépasser cinquante millisecondes de latence",
+        "Que des gens lui parlent tous les jours en payant, plutôt qu'au modèle d'OpenAI"
+      ],
+      "c": 3,
+      "e": "Publier en open source est facile : tout le monde est ravi puisque c'est gratuit. Faire payer est beaucoup plus dur, et c'est la seule preuve que le modèle sert vraiment. Le « dernier kilomètre » — prononcer les numéros de téléphone en portugais, développer « docteur » et « professeur » en coréen — n'était pas la mission d'un laboratoire non lucratif : c'est précisément ce qui justifiait de créer une entreprise à côté de Kyutai."
+    },
+    {
+      "cat": "idée",
+      "qui": "invité",
+      "tc": 3166,
+      "q": "Selon l'invité, qu'est-ce qui sépare encore la voix du statut de couche d'interaction permanente avec les machines ?",
+      "o": [
+        "L'amélioration technique des modèles eux-mêmes : fiabilité, qualité des voix, personnalisation",
+        "L'intégration dans les produits des clients, seule source durable de défensibilité sur ce marché",
+        "L'adoption par le grand public d'un appareil capable de remplacer complètement le smartphone",
+        "La baisse du coût d'inférence, encore prohibitif pour les usages gratuits à très grande échelle"
+      ],
+      "c": 0,
+      "e": "Il dit penser « absolument le contraire » de la thèse qu'il prête à Mati, d'ElevenLabs, selon laquelle la technologie vocale devient une commodité et la défensibilité viendra de l'intégration client. Son argument : la voix est bien moins mature que le texte — pour départager deux modèles de texte il faut des problèmes mathématiques ouverts depuis des siècles, alors qu'un modèle de voix échoue une fois sur deux à prononcer un numéro de téléphone ou une URL. C'est ce qui justifie le choix de Gradium de ne faire que les modèles et de rester agnostique vis-à-vis des applications.",
+      "bonus": true
+    },
+    {
+      "cat": "idée",
+      "qui": "invité",
+      "tc": 4744,
+      "q": "Quel argument l'invité oppose-t-il aux fonds qui plaçaient toute la différenciation du côté des applications ?",
+      "o": [
+        "Les applications dépendent d'un fournisseur unique et voient leur marge disparaître à chaque hausse de prix",
+        "Les équipes applicatives ne savent pas traiter le dernier kilomètre qui rend un produit utilisable en production",
+        "Les modèles de voix sont si petits que leur coût d'entraînement ne constitue plus une barrière à l'entrée",
+        "N'importe qui peut produire la maquette d'un Lovable ou d'un Cursor, personne ne peut maquetter un modèle"
+      ],
+      "c": 3,
+      "e": "Le savoir-faire et le coût de fabrication des modèles sont pour lui la vraie barrière, et il estime que les faits lui ont « un peu donné raison ». C'est aussi ce qui fonde le positionnement de Gradium en frontier lab de la voix : un groupe de gens avec du calcul dont le produit est des modèles à la frontière des performances, mais qui reste une entreprise commerciale guidée par la création de valeur et le revenu, pas un labo qui ferait un jour des produits.",
+      "bonus": true
+    }
+  ]
+}
